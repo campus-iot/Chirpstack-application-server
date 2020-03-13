@@ -35,9 +35,11 @@ class MapDevice extends Component {
     };
 
     let position = [];
-    if (typeof (this.props.device.location) !== "undefined" && typeof (this.props.device.location.latitude) !== "undefined" 
+    if (this.props.device.location != null){
+      if (typeof (this.props.device.location.latitude) !== "undefined" 
         && typeof (this.props.device.location.longitude !== "undefined")) {
-      position = [this.props.device.location.latitude, this.props.device.location.longitude];
+        position = [this.props.device.location.latitude, this.props.device.location.longitude];
+      }
     } else {
       position = [0, 0];
     }
