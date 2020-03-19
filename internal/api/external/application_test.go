@@ -430,6 +430,70 @@ func (ts *APITestSuite) TestApplication() {
 			})
 		})
 
+		t.Run("KafkaIntegration", func(t *testing.T) {
+			t.Run("Create", func(t *testing.T) {
+				assert := require.New(t)
+
+				createReq := pb.CreateKafkaIntegrationRequest{
+					Integration: &pb.KafkaIntegration{
+						ApplicationId: createResp.Id,
+						Server:        "http://localhost:1234",
+					},
+				}
+				_, err := api.CreateKafkaIntegration(context.Background(), &createReq)
+				assert.NoError(err)
+
+				t.Run("Get", func(t *testing.T) {
+					assert := require.New(t)
+
+					i, err := api.GetKafkaIntegration(context.Background(), &pb.GetKafkaIntegrationRequest{
+						ApplicationId: createResp.Id,
+					})
+					assert.NoError(err)
+					assert.Equal(createReq.Integration, i.Integration)
+				})
+
+				t.Run("List", func(t *testing.T) {
+					assert := require.New(t)
+
+					resp, err := api.ListIntegrations(context.Background(), &pb.ListIntegrationRequest{ApplicationId: createResp.Id})
+					assert.NoError(err)
+
+					assert.EqualValues(1, resp.TotalCount)
+					assert.Equal(pb.IntegrationKind_KAFKA resp.Result[0].Kind)
+				})
+
+				t.Run("Update", func(t *testing.T) {
+					assert := require.New(t)
+
+					updateReq := pb.UpdateKafkaIntegrationRequest{
+						Integration: &pb.KafkaIntegration{
+							ApplicationId: createResp.Id,
+							Server:        "https://localhost:12345",
+						},
+					}
+					_, err := api.UpdateKafkaIntegration(context.Background(), &updateReq)
+					assert.NoError(err)
+
+					i, err := api.GetKafkaIntegration(context.Background(), &pb.GetKafkaIntegrationRequest{
+						ApplicationId: createResp.Id,
+					})
+					assert.NoError(err)
+					assert.Equal(updateReq.Integration, i.Integration)
+				})
+
+				t.Run("Delete", func(t *testing.T) {
+					assert := require.New(t)
+
+					_, err := api.DeleteKafkaIntegration(context.Background(), &pb.DeleteKafkaIntegrationRequest{ApplicationId: createResp.Id})
+					assert.NoError(err)
+
+					_, err = api.GetKafkaIntegration(context.Background(), &pb.GetKafkaIntegrationRequest{ApplicationId: createResp.Id})
+					assert.Equal(codes.NotFound, grpc.Code(err))
+				})
+			})
+		})
+
 		t.Run("MyDevicesIntegration", func(t *testing.T) {
 			t.Run("Create", func(t *testing.T) {
 				assert := require.New(t)

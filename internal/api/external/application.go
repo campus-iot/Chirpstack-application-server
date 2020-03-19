@@ -20,6 +20,7 @@ import (
 	"github.com/brocaar/chirpstack-application-server/internal/integration"
 	"github.com/brocaar/chirpstack-application-server/internal/integration/http"
 	"github.com/brocaar/chirpstack-application-server/internal/integration/influxdb"
+	"github.com/brocaar/chirpstack-application-server/internal/integration/kafka"
 	"github.com/brocaar/chirpstack-application-server/internal/integration/mydevices"
 	"github.com/brocaar/chirpstack-application-server/internal/integration/thingsboard"
 	"github.com/brocaar/chirpstack-application-server/internal/storage"
@@ -787,6 +788,119 @@ func (a *ApplicationAPI) DeleteMyDevicesIntegration(ctx context.Context, in *pb.
 	return &empty.Empty{}, nil
 }
 
+// CreateKafkaIntegration creates a Kafka application-integration.
+func (a *ApplicationAPI) CreateKafkaIntegration(ctx context.Context, in *pb.CreateKafkaIntegrationRequest) (*empty.Empty, error) {
+	if in.Integration == nil {
+		return nil, grpc.Errorf(codes.InvalidArgument, "integration must not be nil")
+	}
+
+	if err := a.validator.Validate(ctx,
+		auth.ValidateApplicationAccess(in.Integration.ApplicationId, auth.Update),
+	); err != nil {
+		return nil, grpc.Errorf(codes.Unauthenticated, "authentication failed: %s", err)
+	}
+
+	conf := kafka.Config{
+		Server: in.Integration.Server,
+	}
+
+	confJSON, err := json.Marshal(conf)
+	if err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	integration := storage.Integration{
+		ApplicationID: in.Integration.ApplicationId,
+		Kind:          integration.Kafka,
+		Settings:      confJSON,
+	}
+	if err := storage.CreateIntegration(ctx, storage.DB(), &integration); err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	return &empty.Empty{}, nil
+}
+
+// GetKafkaIntegration returns the Kafka application-integration.
+func (a *ApplicationAPI) GetKafkaIntegration(ctx context.Context, in *pb.GetKafkaIntegrationRequest) (*pb.GetKafkaIntegrationResponse, error) {
+	if err := a.validator.Validate(ctx,
+		auth.ValidateApplicationAccess(in.ApplicationId, auth.Update),
+	); err != nil {
+		return nil, grpc.Errorf(codes.Unauthenticated, "authentication failed: %s", err)
+	}
+
+	integration, err := storage.GetIntegrationByApplicationID(ctx, storage.DB(), in.ApplicationId, integration.Kafka)
+	if err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	var conf kafka.Config
+	if err = json.Unmarshal(integration.Settings, &conf); err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	return &pb.GetKafkaIntegrationResponse{
+		Integration: &pb.KafkaIntegration{
+			ApplicationId: in.ApplicationId,
+			Server:        conf.Server,
+		},
+	}, nil
+}
+
+// UpdateKafkaIntegration updates the Kafka application-integration.
+func (a *ApplicationAPI) UpdateKafkaIntegration(ctx context.Context, in *pb.UpdateKafkaIntegrationRequest) (*empty.Empty, error) {
+	if in.Integration == nil {
+		return nil, grpc.Errorf(codes.InvalidArgument, "integration must not be nil")
+	}
+
+	if err := a.validator.Validate(ctx,
+		auth.ValidateApplicationAccess(in.Integration.ApplicationId, auth.Update),
+	); err != nil {
+		return nil, grpc.Errorf(codes.Unauthenticated, "authentication failed: %s", err)
+	}
+
+	integration, err := storage.GetIntegrationByApplicationID(ctx, storage.DB(), in.Integration.ApplicationId, integration.Kafka)
+	if err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	conf := kafka.Config{
+		Server: in.Integration.Server,
+	}
+
+	confJSON, err := json.Marshal(conf)
+	if err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	integration.Settings = confJSON
+	if err = storage.UpdateIntegration(ctx, storage.DB(), &integration); err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	return &empty.Empty{}, nil
+}
+
+// DeleteKafkaIntegration deletes the Kafka application-integration.
+func (a *ApplicationAPI) DeleteKafkaIntegration(ctx context.Context, in *pb.DeleteKafkaIntegrationRequest) (*empty.Empty, error) {
+	if err := a.validator.Validate(ctx,
+		auth.ValidateApplicationAccess(in.ApplicationId, auth.Update),
+	); err != nil {
+		return nil, grpc.Errorf(codes.Unauthenticated, "authentication failed: %s", err)
+	}
+
+	integration, err := storage.GetIntegrationByApplicationID(ctx, storage.DB(), in.ApplicationId, integration.Kafka)
+	if err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	if err = storage.DeleteIntegration(ctx, storage.DB(), integration.ID); err != nil {
+		return nil, helpers.ErrToRPCError(err)
+	}
+
+	return &empty.Empty{}, nil
+}
+
 // ListIntegrations lists all configured integrations.
 func (a *ApplicationAPI) ListIntegrations(ctx context.Context, in *pb.ListIntegrationRequest) (*pb.ListIntegrationResponse, error) {
 	if err := a.validator.Validate(ctx,
@@ -814,6 +928,8 @@ func (a *ApplicationAPI) ListIntegrations(ctx context.Context, in *pb.ListIntegr
 			out.Result = append(out.Result, &pb.IntegrationListItem{Kind: pb.IntegrationKind_THINGSBOARD})
 		case integration.MyDevices:
 			out.Result = append(out.Result, &pb.IntegrationListItem{Kind: pb.IntegrationKind_MYDEVICES})
+		case integration.Kafka:
+			out.Result = append(out.Result, &pb.IntegrationListItem{Kind: pb.IntegrationKind_KAFKA})
 		default:
 			return nil, grpc.Errorf(codes.Internal, "unknown integration kind: %s", intgr.Kind)
 		}
