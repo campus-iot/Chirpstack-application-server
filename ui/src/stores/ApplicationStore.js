@@ -225,6 +225,67 @@ class ApplicationStore extends EventEmitter {
     });
   }
 
+  createKafkaIntegration(integration, callbackFunc) {
+    this.swagger.then(client => {
+      client.apis.ApplicationService.CreateKafkaIntegration({
+        "integration.application_id": integration.applicationID,
+        body: {
+          integration: integration,
+        },
+      })
+        .then(checkStatus)
+        .then(resp => {
+          this.integrationNotification("Kafka", "created");
+          callbackFunc(resp.obj);
+        })
+        .catch(errorHandler);
+    });
+  }
+
+  getKafkaIntegration(applicationID, callbackFunc) {
+    this.swagger.then(client => {
+      client.apis.ApplicationService.GetKafkaIntegration({
+        application_id: applicationID,
+      })
+        .then(checkStatus)
+        .then(resp => {
+          callbackFunc(resp.obj);
+        })
+        .catch(errorHandler);
+    });
+  }
+
+  updateKafkaIntegration(integration, callbackFunc) {
+    this.swagger.then(client => {
+      client.apis.ApplicationService.UpdateKafkaIntegration({
+        "integration.application_id": integration.applicationID,
+        body: {
+          integration: integration,
+        },
+      })
+      .then(checkStatus)
+      .then(resp => {
+        this.integrationNotification("Kafka", "updated");
+        callbackFunc(resp.obj);
+      })
+      .catch(errorHandler);
+    });
+  }
+
+  deleteKafkaIntegration(applicationID, callbackFunc) {
+    this.swagger.then(client => {
+      client.apis.ApplicationService.DeleteKafkaIntegration({
+        application_id: applicationID,
+      })
+      .then(checkStatus)
+      .then(resp => {
+        this.integrationNotification("Kafka", "deleted");
+        callbackFunc(resp.obj);
+      })
+      .catch(errorHandler);
+    });
+  }
+
   createThingsBoardIntegration(integration, callbackFunc) {
     this.swagger.then(client => {
       client.apis.ApplicationService.CreateThingsBoardIntegration({
@@ -245,7 +306,7 @@ class ApplicationStore extends EventEmitter {
   getThingsBoardIntegration(applicationID, callbackFunc) {
     this.swagger.then(client => {
       client.apis.ApplicationService.GetThingsBoardIntegration({
-        application_id: applicationID, 
+        application_id: applicationID,
       })
         .then(checkStatus)
         .then(resp => {
@@ -306,7 +367,7 @@ class ApplicationStore extends EventEmitter {
   getMyDevicesIntegration(applicationID, callbackFunc) {
     this.swagger.then(client => {
       client.apis.ApplicationService.GetMyDevicesIntegration({
-        application_id: applicationID, 
+        application_id: applicationID,
       })
         .then(checkStatus)
         .then(resp => {

@@ -77,7 +77,7 @@ class HTTPIntegrationHeaderForm extends FormComponent {
           </IconButton>
         </Grid>
       </Grid>
-    );    
+    );
   }
 }
 
@@ -346,6 +346,39 @@ class ThingsBoardIntegrationForm extends FormComponent {
 
 ThingsBoardIntegrationForm = withStyles(styles)(ThingsBoardIntegrationForm);
 
+class KafkaIntegrationForm extends FormComponent {
+  onChange(e) {
+    super.onChange(e);
+    this.props.onChange(this.state.object);
+  }
+
+  render() {
+    if (this.state.object === undefined) {
+      return null;
+    }
+
+    return (
+      <FormControl fullWidth margin="normal">
+        <FormLabel>Kafka integration configuration</FormLabel>
+        <TextField
+          id="server"
+          label="kafka server"
+          placeholder="http://host:port"
+          value={this.state.object.server || ""}
+          onChange={this.onChange}
+          margin="normal"
+          required
+          fullWidth
+        />
+        <FormHelperText>
+        </FormHelperText>
+      </FormControl>
+    );
+  }
+}
+
+KafkaIntegrationForm = withStyles(styles)(KafkaIntegrationForm);
+
 
 class MyDevicesIntegrationForm extends FormComponent {
   constructor() {
@@ -450,6 +483,7 @@ class IntegrationForm extends FormComponent {
       {value: "influxdb", label: "InfluxDB integration"},
       {value: "mydevices", label:"myDevices.com"},
       {value: "thingsboard", label: "ThingsBoard.io"},
+      {value: "kafka", label:"Kafka integration"}
     ];
 
     callbackFunc(kindOptions);
@@ -479,6 +513,7 @@ class IntegrationForm extends FormComponent {
         {this.state.object.kind === "influxdb" && <InfluxDBIntegrationForm object={this.state.object} onChange={this.onFormChange} />}
         {this.state.object.kind === "thingsboard" && <ThingsBoardIntegrationForm object={this.state.object} onChange={this.onFormChange} />}
         {this.state.object.kind === "mydevices" && <MyDevicesIntegrationForm object={this.state.object} onChange={this.onFormChange} />}
+        {this.state.object.kind === "kafka" && <KafkaIntegrationForm object={this.state.object} onChange={this.onFormChange} />}
       </Form>
     );
   }
