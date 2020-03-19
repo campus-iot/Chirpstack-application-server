@@ -18,6 +18,7 @@ import (
 	"github.com/brocaar/chirpstack-application-server/internal/integration/mydevices"
 	"github.com/brocaar/chirpstack-application-server/internal/integration/thingsboard"
 	"github.com/brocaar/chirpstack-application-server/internal/storage"
+	"github.com/brocaar/chirpstack-application-server/internal/integration/kafka"
 )
 
 // Integration implements the application integration wrapper.
@@ -148,6 +149,12 @@ func (i *Integration) getApplicationIntegration(ctx context.Context, id uint64) 
 			var conf thingsboard.Config
 			if err := json.NewDecoder(bytes.NewReader(appint.Settings)).Decode(&conf); err != nil {
 				return nil, errors.Wrap(err, "decode thingsboard integration config error")
+			}
+			configs = append(configs, conf)
+		case integration.Kafka:
+			var conf kafka.Config
+			if err := json.NewDecoder(bytes.NewReader(appint.Settings)).Decode(&conf); err != nil {
+				return nil, errors.Wrap(err, "decode kafka integration config error")
 			}
 			configs = append(configs, conf)
 		case integration.MyDevices:

@@ -25,6 +25,7 @@ import (
 	"github.com/brocaar/chirpstack-application-server/internal/integration/thingsboard"
 	"github.com/brocaar/chirpstack-application-server/internal/logging"
 	"github.com/brocaar/chirpstack-application-server/internal/storage"
+	"github.com/brocaar/chirpstack-application-server/internal/integration/kafka"
 )
 
 // Integration implements the multi integration.
@@ -60,6 +61,8 @@ func New(m marshaler.Type, confs []interface{}) (*Integration, error) {
 			ii, err = postgresql.New(v)
 		case thingsboard.Config:
 			ii, err = thingsboard.New(v)
+		case kafka.Config:
+			ii, err = kafka.New(m, v)
 		case mydevices.Config:
 			ii, err = mydevices.New(v)
 		case config.IntegrationAMQPConfig:

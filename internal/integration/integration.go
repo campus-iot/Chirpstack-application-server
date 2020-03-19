@@ -9,6 +9,7 @@ import (
 // Handler kinds
 const (
 	HTTP        = "HTTP"
+	Kafka		= "KAFKA"
 	InfluxDB    = "INFLUXDB"
 	ThingsBoard = "THINGSBOARD"
 	MyDevices   = "MYDEVICES"
