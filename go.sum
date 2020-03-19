@@ -230,6 +230,10 @@ github.com/hashicorp/golang-lru v0.5.1 h1:0hERBMJE1eitiLkihrMvRVBYAkpHzc/J3QdDN+
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/hcl v1.0.0 h1:0Anlzjpi4vEasTeNFn2mLJgTSwt0+6sfsiTG8qcWGx4=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
+github.com/hoellejal/chirpstack-api/go/v3 v3.2.0 h1:izdTa3RJdw5O7XtfhCd4snS1i0sAeIF4nlOj1z2zXls=
+github.com/hoellejal/chirpstack-api/go/v3 v3.2.0/go.mod h1:77sGjaarTgNAoBJ9s0fqDSYyUil65MejNUKkhCiG+E8=
+github.com/hoellejal/chirpstack-api/go/v3 v3.2.1 h1:5gwRPkOE9884jC0U10mmo+TygzzDZjKwxf1qOlbdrwc=
+github.com/hoellejal/chirpstack-api/go/v3 v3.2.1/go.mod h1:77sGjaarTgNAoBJ9s0fqDSYyUil65MejNUKkhCiG+E8=
 github.com/imdario/mergo v0.3.4/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.6 h1:xTNEAn+kxVO7dTZGu0CegyqKZmoWFI0rF8UxjlB2d28=
 github.com/imdario/mergo v0.3.6/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=

@@ -21,6 +21,7 @@ import (
 	"github.com/brocaar/chirpstack-application-server/internal/backend/networkserver"
 	"github.com/brocaar/chirpstack-application-server/internal/storage"
 	"github.com/brocaar/lorawan"
+	pb "github.com/hoellejal/chirpstack-api/go/v3/as/external/api"
 )
 
 // GatewayAPI exports the Gateway related functions.
