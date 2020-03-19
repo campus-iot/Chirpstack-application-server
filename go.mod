@@ -7,6 +7,7 @@ require (
 	cloud.google.com/go/pubsub v1.1.0
 	github.com/Azure/azure-service-bus-go v0.10.0
 	github.com/NickBall/go-aes-key-wrap v0.0.0-20170929221519-1c3aa3e4dfc5
+	github.com/Shopify/sarama v1.26.1
 	github.com/aws/aws-sdk-go v1.26.3
 	github.com/brocaar/chirpstack-api/go/v3 v3.1.8
 	github.com/brocaar/lorawan v0.0.0-20191115102621-6095d473cf60
@@ -53,7 +54,7 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
 	go.opencensus.io v0.22.2 // indirect
-	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
+	golang.org/x/crypto v0.0.0-20200204104054-c9f3fb736b72
 	golang.org/x/exp v0.0.0-20191129062945-2f5052295587 // indirect
 	golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f
 	golang.org/x/net v0.0.0-20200219183655-46282727080f
