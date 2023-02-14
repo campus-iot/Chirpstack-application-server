@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/pubsub v1.1.0
 	github.com/Azure/azure-service-bus-go v0.10.0
 	github.com/NickBall/go-aes-key-wrap v0.0.0-20170929221519-1c3aa3e4dfc5
-	github.com/aws/aws-sdk-go v1.26.3
+	github.com/aws/aws-sdk-go v1.34.0
 	github.com/brocaar/chirpstack-api/go/v3 v3.1.8
 	github.com/brocaar/lorawan v0.0.0-20191115102621-6095d473cf60
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
@@ -34,7 +34,7 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/mmcloughlin/geohash v0.9.0
 	github.com/pelletier/go-toml v1.6.0 // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.2.1
 	github.com/prometheus/client_model v0.0.0-20191202183732-d1d2010b5bee // indirect
 	github.com/prometheus/procfs v0.0.8 // indirect
@@ -49,7 +49,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.6.1
 	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.5.1
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
